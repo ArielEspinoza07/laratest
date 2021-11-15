@@ -20,7 +20,7 @@ class CreateTypeFoodsTable extends Migration
             $table->string('name')
                   ->index('type_foods_name');
             $table->bigInteger('created_by')
-                  ->unsigned()
+                  ->unsigned()->nullable()
                   ->index('type_foods_created_by');
             $table->bigInteger('updated_by')
                   ->unsigned()

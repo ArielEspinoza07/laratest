@@ -36,13 +36,8 @@ class TypeFoodController extends Controller
 
     public function store(Request $request)
     {
-        $payLoad               = $request->except('_token');
-        $payLoad['created_by'] = User::query()
-                                     ->select('id')
-                                     ->inRandomOrder()
-                                     ->value('id');
         TypeFood::query()
-                ->create($payLoad);
+                ->create($request->except('_token'));
         session()->flash('success', 'Type Food was successfully created.');
 
         return redirect()->route('foods.types.index');
@@ -57,12 +52,7 @@ class TypeFoodController extends Controller
 
     public function update(Request $request, TypeFood $type)
     {
-        $payLoad               = $request->except('_token');
-        $payLoad['updated_by'] = User::query()
-                                     ->select('id')
-                                     ->inRandomOrder()
-                                     ->value('id');
-        $type->update($payLoad);
+        $type->update($request->except('_token'));
         session()->flash('success', 'Type Food was successfully updated.');
 
         return redirect()->route('foods.types.index');
@@ -71,12 +61,6 @@ class TypeFoodController extends Controller
 
     public function destroy(TypeFood $type)
     {
-        $type->update([
-            'deleted_by' => User::query()
-                                ->select('id')
-                                ->inRandomOrder()
-                                ->value('id')
-        ]);
         $type->delete();
         session()->flash('success', 'Type Food was successfully deleted.');
 

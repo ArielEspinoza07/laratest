@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,15 +15,34 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
-Route::prefix('foods') // /foods
-     ->name('foods.') // foods.
-     ->middleware(['auth', 'is.admin'])
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])
+     ->name('home');
+
+Route::prefix('foods')
      ->group(function () {
-         Route::patch('types/{type}/restore', [\App\Http\Controllers\TypeFoodController::class, 'restore'])
-              ->name('types.restore');
-         Route::resource('types', \App\Http\Controllers\TypeFoodController::class)
+         Route::name('foods.')
+              ->group(function () {
+                  Route::patch('types/{type}/restore', [\App\Http\Controllers\TypeFoodController::class, 'restore'])
+                       ->name('types.restore');
+                  Route::resource('types', \App\Http\Controllers\TypeFoodController::class)
+                       ->except('edit');
+              });
+     });
+
+Route::prefix('settings')
+    ->name('settings.')
+     ->group(function () {
+         Route::patch('users/{user}/restore', [\App\Http\Controllers\UserController::class, 'restore'])
+              ->name('users.restore');
+         Route::resource('users', \App\Http\Controllers\UserController::class)
+              ->except('edit');
+         Route::resource('roles', \App\Http\Controllers\UserController::class)
+              ->except('edit');
+         Route::resource('permissions', \App\Http\Controllers\UserController::class)
               ->except('edit');
      });

@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\TypeFood;
 use App\Models\User;
+use App\Observers\TypeFoodObserver;
 use App\Observers\UserObserver;
 use Illuminate\Support\ServiceProvider;
 
@@ -13,7 +15,8 @@ class ObserverServiceProvider extends ServiceProvider
      * @var array
      */
     protected $observers = [
-        User::class => UserObserver::class,
+        TypeFood::class => TypeFoodObserver::class,
+        User::class     => UserObserver::class,
     ];
 
 
